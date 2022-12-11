@@ -176,26 +176,29 @@ public class FlowDefinitionController {
                 break;
             }
         }
+        String businessKey = null;
 
         SysUser user = SecurityUtils.getLoginUser().getUser();
         // insert tug_fee
         // generate business_key
-        TugFee tugFee = new TugFee();
-        tugFee.setApplicantId(user.getUserId());
-        tugFee.setShipName(variables.get("shipName").toString());
-        tugFee.setLength((long) Double.parseDouble(variables.get("length").toString()));
-        tugFee.setShipType(variables.get("shipType").toString());
-        tugFee.setDepth((long) Double.parseDouble(variables.get("depth").toString()));
-        tugFee.setWorkType(workType);
-        tugFee.setTugNum(tugNum);
-        tugFee.setAmount(workTypeValue * tugNum);
-        tugFee.setWorkPlace(variables.get("workPlace").toString());
-        tugFee.setApplicantComment(variables.get("applicant_comment").toString());
-        tugFee.setApplicateTime(new Date());
+        if (variables.containsKey("shipName")) {
+            TugFee tugFee = new TugFee();
+            tugFee.setApplicantId(user.getUserId());
+            tugFee.setShipName(variables.get("shipName").toString());
+            tugFee.setLength((long) Double.parseDouble(variables.get("length").toString()));
+            tugFee.setShipType(variables.get("shipType").toString());
+            tugFee.setDepth((long) Double.parseDouble(variables.get("depth").toString()));
+            tugFee.setWorkType(workType);
+            tugFee.setTugNum(tugNum);
+            tugFee.setAmount(workTypeValue * tugNum);
+            tugFee.setWorkPlace(variables.get("workPlace").toString());
+            tugFee.setApplicantComment(variables.get("applicant_comment").toString());
+            tugFee.setApplicateTime(new Date());
 
-        int i = tugFeeService.insertTugFee(tugFee);
+            int i = tugFeeService.insertTugFee(tugFee);
+            businessKey = String.valueOf(i);
+        }
 
-        String businessKey = i + "";
         return flowDefinitionService.startProcessInstanceWithKeyById(procDefId, businessKey, variables);
 
     }

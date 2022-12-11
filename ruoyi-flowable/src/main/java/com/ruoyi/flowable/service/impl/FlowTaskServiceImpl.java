@@ -119,24 +119,26 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             taskService.setAssignee(taskVo.getTaskId(), userId.toString());
             taskService.complete(taskVo.getTaskId(), taskVo.getValues());
         }
-        switch (task.getName()) {
-            case "管理员审批":
-                tugFee.setState("0");
-                break;
-            case "计费员审批":
-                tugFee.setState("1");
-                break;
-            case "核算员审批":
-                tugFee.setState("2");
-                break;
-            case "船代审批":
-                tugFee.setState("3");
-                break;
-            default:
-                break;
-        }
+        if (!(tugFee == null)) {
+            switch (task.getName()) {
+                case "管理员审批":
+                    tugFee.setState("0");
+                    break;
+                case "计费员审批":
+                    tugFee.setState("1");
+                    break;
+                case "核算员审批":
+                    tugFee.setState("2");
+                    break;
+                case "船代审批":
+                    tugFee.setState("3");
+                    break;
+                default:
+                    break;
+            }
 
-        tugFeeMapper.updateTugFee(tugFee);
+            tugFeeMapper.updateTugFee(tugFee);
+        }
         return AjaxResult.success();
     }
 
@@ -153,6 +155,10 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         // 当前任务 task
         Task task = taskService.createTaskQuery().taskId(flowTaskVo.getTaskId()).singleResult();
         TugFee tugFee = hook(task, flowTaskVo);
+        if (!(tugFee == null)) {
+            tugFeeMapper.updateTugFee(tugFee);
+        }
+
         // 获取流程定义信息
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().processDefinitionId(task.getProcessDefinitionId()).singleResult();
         // 获取所有节点信息
@@ -242,7 +248,6 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         // 设置驳回意见
         currentTaskIds.forEach(item -> taskService.addComment(item, task.getProcessInstanceId(), FlowComment.REJECT.getType(), flowTaskVo.getComment()));
 
-        tugFeeMapper.updateTugFee(tugFee);
 
         try {
             // 如果父级任务多于 1 个，说明当前节点不是并行节点，原因为不考虑多对多情况
@@ -517,12 +522,17 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             flowTask.setFinishTime(hisIns.getEndTime());
             flowTask.setProcInsId(hisIns.getId());
 
-            ProcessInstance processInstance = runtimeService.createProcessInstanceQuery().processInstanceId(hisIns.getId()).singleResult();
-            String businessKey = processInstance.getBusinessKey();
 
-            TugFeeVo tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+            HistoricProcessInstance processInstance = historicProcessInstanceQuery.processInstanceId(hisIns.getId()).singleResult();
+            if (!(processInstance == null)) {
+                String businessKey = processInstance.getBusinessKey();
 
-            flowTask.setTugFeeVo(tugFeeVo);
+                if (StringUtils.isNotBlank(businessKey)) {
+                    TugFeeVo tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+                    flowTask.setTugFeeVo(tugFeeVo);
+                }
+            }
+
 
             // 计算耗时
             if (Objects.nonNull(hisIns.getEndTime())) {
@@ -574,9 +584,11 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                         .processInstanceId(flowTaskVo.getInstanceId())
                         .singleResult();
         String businessKey = processInstance.getBusinessKey();
-        TugFee tugFee = tugFeeMapper.selectTugFeeById(Long.valueOf(businessKey));
-        tugFee.setDelete(1);
-        tugFeeMapper.updateTugFee(tugFee);
+        if (StringUtils.isEmpty(businessKey)) {
+            TugFee tugFee = tugFeeMapper.selectTugFeeById(Long.valueOf(businessKey));
+            tugFee.setDelete(1);
+            tugFeeMapper.updateTugFee(tugFee);
+        }
         BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());
         if (Objects.nonNull(bpmnModel)) {
             Process process = bpmnModel.getMainProcess();
@@ -1088,7 +1100,10 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     .singleResult()
                     .getBusinessKey();
 
-            TugFeeVo tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+            TugFeeVo tugFeeVo = null;
+            if (StringUtils.isNotEmpty(businessKey)) {
+                tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+            }
             flowTask.setTugFeeVo(tugFeeVo);
 
             SysUser startUser = sysUserService.selectUserById(Long.parseLong(historicProcessInstance.getStartUserId()));
@@ -1146,7 +1161,12 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     .singleResult();
 
             String businessKey = historicProcessInstance.getBusinessKey();
-            TugFeeVo tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+
+            TugFeeVo tugFeeVo = null;
+            if (!(businessKey == null) && !"".equals(businessKey)) {
+                tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+            }
+
             flowTask.setTugFeeVo(tugFeeVo);
 
             SysUser startUser = sysUserService.selectUserById(Long.parseLong(historicProcessInstance.getStartUserId()));
@@ -1171,7 +1191,13 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                 .singleResult();
 
         String businessKey = processInstance.getBusinessKey();
+        if (businessKey == null || businessKey.equals("")) {
+            return null;
+        }
         TugFee tugFee = tugFeeMapper.selectTugFeeById(Long.valueOf(businessKey));
+        if (tugFee == null) {
+            return null;
+        }
         switch (name) {
             case "管理员审批":
                 // todo: 是否需要设置 船代审批 的 assignee?
