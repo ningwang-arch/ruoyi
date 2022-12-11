@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.TugFeeMapper">
+
+    <resultMap type="TugFee" id="TugFeeResult">
+        <result property="id" column="id"/>
+        <result property="shipName" column="ship_name"/>
+        <result property="shipType" column="ship_type"/>
+        <result property="length" column="length"/>
+        <result property="depth" column="depth"/>
+        <result property="workType" column="work_type"/>
+        <result property="workPlace" column="work_place"/>
+        <result property="workTime" column="work_time"/>
+        <result property="tugNum" column="tug_num"/>
+        <result property="tugUnitPrice" column="tug_unit_price"/>
+        <result property="amount" column="amount"/>
+        <result property="state" column="state"/>
+        <result property="applicantId" column="applicant_id"/>
+        <result property="reviewerId" column="reviewer_id"/>
+        <result property="caculatorId" column="caculator_id"/>
+        <result property="adminId" column="admin_id"/>
+        <result property="caculatorComment" column="caculator_comment"/>
+        <result property="reviewerComment" column="reviewer_comment"/>
+        <result property="applicantComment" column="applicant_comment"/>
+        <result property="applicateTime" column="applicate_time"/>
+        <result property="adminConfirmTime" column="admin_confirm_time"/>
+        <result property="caculateTime" column="caculate_time"/>
+        <result property="reviewTime" column="review_time"/>
+        <result property="applicantConfirmTime" column="applicant_confirm_time"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="delete" column="delete"/>
+    </resultMap>
+
+    <sql id="selectTugFeeVo">
+        select id,
+               ship_name,
+               ship_type,
+               length,
+               depth,
+               work_type,
+               work_place,
+               work_time,
+               tug_num,
+               tug_unit_price,
+               amount,
+               state,
+               applicant_id,
+               reviewer_id,
+               caculator_id,
+               admin_id,
+               caculator_comment,
+               reviewer_comment,
+               applicant_comment,
+               applicate_time,
+               admin_confirm_time,
+               caculate_time,
+               review_time,
+               applicant_confirm_time,
+               create_time,
+               update_time,
+        delete
+        from tug_fee
+    </sql>
+
+    <select id="selectTugFeeList" parameterType="TugFee" resultMap="TugFeeResult">
+        <include refid="selectTugFeeVo"/>
+        <where>
+            <if test="shipName != null  and shipName != ''">and ship_name like concat('%', #{shipName}, '%')</if>
+            <if test="shipType != null  and shipType != ''">and ship_type = #{shipType}</if>
+            <if test="length != null ">and length = #{length}</if>
+            <if test="depth != null ">and depth = #{depth}</if>
+            <if test="workType != null  and workType != ''">and work_type = #{workType}</if>
+            <if test="workPlace != null  and workPlace != ''">and work_place = #{workPlace}</if>
+            <if test="workTime != null ">and work_time = #{workTime}</if>
+            <if test="tugNum != null ">and tug_num = #{tugNum}</if>
+            <if test="tugUnitPrice != null ">and tug_unit_price = #{tugUnitPrice}</if>
+            <if test="amount != null ">and amount = #{amount}</if>
+            <if test="state != null  and state != ''">and state = #{state}</if>
+            <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
+            <if test="reviewerId != null ">and reviewer_id = #{reviewerId}</if>
+            <if test="caculatorId != null ">and caculator_id = #{caculatorId}</if>
+            <if test="adminId != null ">and admin_id = #{adminId}</if>
+            <if test="caculatorComment != null  and caculatorComment != ''">and caculator_comment =
+                #{caculatorComment}
+            </if>
+            <if test="reviewerComment != null  and reviewerComment != ''">and reviewer_comment = #{reviewerComment}</if>
+            <if test="applicantComment != null  and applicantComment != ''">and applicant_comment =
+                #{applicantComment}
+            </if>
+            <if test="applicateTime != null ">and applicate_time = #{applicateTime}</if>
+            <if test="adminConfirmTime != null ">and admin_confirm_time = #{adminConfirmTime}</if>
+            <if test="caculateTime != null ">and caculate_time = #{caculateTime}</if>
+            <if test="reviewTime != null ">and review_time = #{reviewTime}</if>
+            <if test="applicantConfirmTime != null ">and applicant_confirm_time = #{applicantConfirmTime}</if>
+            <if test="delete != null ">and delete = #{delete}</if>
+        </where>
+    </select>
+
+    <select id="selectTugFeeById" parameterType="Long" resultMap="TugFeeResult">
+        <include refid="selectTugFeeVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTugFee" parameterType="TugFee">
+        <selectKey keyProperty="id" order="AFTER" resultType="Long">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into tug_fee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="shipName != null and shipName != ''">ship_name,</if>
+            <if test="shipType != null and shipType != ''">ship_type,</if>
+            <if test="length != null">length,</if>
+            <if test="depth != null">depth,</if>
+            <if test="workType != null">work_type,</if>
+            <if test="workPlace != null">work_place,</if>
+            <if test="workTime != null">work_time,</if>
+            <if test="tugNum != null">tug_num,</if>
+            <if test="tugUnitPrice != null">tug_unit_price,</if>
+            <if test="amount != null">amount,</if>
+            <if test="state != null and state != ''">state,</if>
+            <if test="applicantId != null">applicant_id,</if>
+            <if test="reviewerId != null">reviewer_id,</if>
+            <if test="caculatorId != null">caculator_id,</if>
+            <if test="adminId != null">admin_id,</if>
+            <if test="caculatorComment != null">caculator_comment,</if>
+            <if test="reviewerComment != null">reviewer_comment,</if>
+            <if test="applicantComment != null">applicant_comment,</if>
+            <if test="applicateTime != null">applicate_time,</if>
+            <if test="adminConfirmTime != null">admin_confirm_time,</if>
+            <if test="caculateTime != null">caculate_time,</if>
+            <if test="reviewTime != null">review_time,</if>
+            <if test="applicantConfirmTime != null">applicant_confirm_time,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delete != null">delete,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="shipName != null and shipName != ''">#{shipName},</if>
+            <if test="shipType != null and shipType != ''">#{shipType},</if>
+            <if test="length != null">#{length},</if>
+            <if test="depth != null">#{depth},</if>
+            <if test="workType != null">#{workType},</if>
+            <if test="workPlace != null">#{workPlace},</if>
+            <if test="workTime != null">#{workTime},</if>
+            <if test="tugNum != null">#{tugNum},</if>
+            <if test="tugUnitPrice != null">#{tugUnitPrice},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="state != null and state != ''">#{state},</if>
+            <if test="applicantId != null">#{applicantId},</if>
+            <if test="reviewerId != null">#{reviewerId},</if>
+            <if test="caculatorId != null">#{caculatorId},</if>
+            <if test="adminId != null">#{adminId},</if>
+            <if test="caculatorComment != null">#{caculatorComment},</if>
+            <if test="reviewerComment != null">#{reviewerComment},</if>
+            <if test="applicantComment != null">#{applicantComment},</if>
+            <if test="applicateTime != null">#{applicateTime},</if>
+            <if test="adminConfirmTime != null">#{adminConfirmTime},</if>
+            <if test="caculateTime != null">#{caculateTime},</if>
+            <if test="reviewTime != null">#{reviewTime},</if>
+            <if test="applicantConfirmTime != null">#{applicantConfirmTime},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delete != null">#{delete},</if>
+        </trim>
+    </insert>
+
+    <update id="updateTugFee" parameterType="TugFee">
+        update tug_fee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shipName != null and shipName != ''">ship_name = #{shipName},</if>
+            <if test="shipType != null and shipType != ''">ship_type = #{shipType},</if>
+            <if test="length != null">length = #{length},</if>
+            <if test="depth != null">depth = #{depth},</if>
+            <if test="workType != null">work_type = #{workType},</if>
+            <if test="workPlace != null">work_place = #{workPlace},</if>
+            <if test="workTime != null">work_time = #{workTime},</if>
+            <if test="tugNum != null">tug_num = #{tugNum},</if>
+            <if test="tugUnitPrice != null">tug_unit_price = #{tugUnitPrice},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="applicantId != null">applicant_id = #{applicantId},</if>
+            <if test="reviewerId != null">reviewer_id = #{reviewerId},</if>
+            <if test="caculatorId != null">caculator_id = #{caculatorId},</if>
+            <if test="adminId != null">admin_id = #{adminId},</if>
+            <if test="caculatorComment != null">caculator_comment = #{caculatorComment},</if>
+            <if test="reviewerComment != null">reviewer_comment = #{reviewerComment},</if>
+            <if test="applicantComment != null">applicant_comment = #{applicantComment},</if>
+            <if test="applicateTime != null">applicate_time = #{applicateTime},</if>
+            <if test="adminConfirmTime != null">admin_confirm_time = #{adminConfirmTime},</if>
+            <if test="caculateTime != null">caculate_time = #{caculateTime},</if>
+            <if test="reviewTime != null">review_time = #{reviewTime},</if>
+            <if test="applicantConfirmTime != null">applicant_confirm_time = #{applicantConfirmTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delete != null">delete = #{delete},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTugFeeById" parameterType="Long">
+        delete
+        from tug_fee
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteTugFeeByIds" parameterType="String">
+        delete from tug_fee where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

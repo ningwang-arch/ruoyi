@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.flowable.mapper.TugFeeVoMapper">
+    <resultMap id="vo" type="com.ruoyi.flowable.domain.vo.TugFeeVo">
+        <id column="id" property="id"/>
+        <result column="ship_name" property="shipName"/>
+        <result column="length" property="length"/>
+        <result column="depth" property="depth"/>
+        <result column="work_place" property="workPlace"/>
+        <result column="work_time" property="workTime"/>
+        <result column="tug_num" property="tugNum"/>
+        <result column="tug_unit_price" property="tugUnitPrice"/>
+        <result column="amount" property="amount"/>
+        <result column="caculator_comment" property="caculatorComment"/>
+        <result column="reviewer_comment" property="reviewerComment"/>
+        <result column="applicant_comment" property="applicantComment"/>
+        <result column="applicant_confirm_comment" property="applicantConfirmComment"/>
+        <result column="applicate_time" property="applicateTime"/>
+        <result column="admin_confirm_time" property="adminConfirmTime"/>
+        <result column="caculate_time" property="caculateTime"/>
+        <result column="review_time" property="reviewTime"/>
+        <result column="applicant_confirm_time" property="applicantConfirmTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="delete" property="delete"/>
+
+        <association column="applicant_id" property="applicant" javaType="com.ruoyi.common.core.domain.entity.SysUser"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserById"/>
+        <association column="reviewer_id" property="reviewer" javaType="com.ruoyi.common.core.domain.entity.SysUser"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserById"/>
+        <association column="caculator_id" property="caculator" javaType="com.ruoyi.common.core.domain.entity.SysUser"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserById"/>
+        <association column="admin_id" property="admin" javaType="com.ruoyi.common.core.domain.entity.SysUser"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserById"/>
+        <association property="state" column="state" javaType="java.lang.String"
+                     select="getState"/>
+        <association property="shipType" column="ship_type" javaType="java.lang.String"
+                     select="getShipType"/>
+        <association property="workType" column="work_type" javaType="java.lang.String"
+                     select="getWorkType"/>
+
+    </resultMap>
+
+    <select id="getState" resultType="java.lang.String">
+        select dict_label
+        from sys_dict_data
+        where dict_type = 'sys_ship_state'
+          and dict_value = #{state}
+    </select>
+
+    <select id="getShipType" resultType="java.lang.String">
+        select dict_label
+        from sys_dict_data
+        where dict_type = 'sys_ship_type'
+          and dict_value = #{shipType}
+    </select>
+
+    <select id="getWorkType" resultType="java.lang.String">
+        select dict_label
+        from sys_dict_data
+        where dict_type = 'sys_work_type'
+          and dict_code = #{workType}
+    </select>
+
+    <select id="queryByParams" resultMap="vo">
+        select
+        tug_fee.id,
+        tug_fee.ship_name,
+        tug_fee.length,
+        tug_fee.depth,
+        tug_fee.work_place,
+        tug_fee.work_time,
+        tug_fee.tug_num,
+        tug_fee.tug_unit_price,
+        tug_fee.amount,
+        tug_fee.caculator_comment,
+        tug_fee.reviewer_comment,
+        tug_fee.applicant_comment,
+        tug_fee.applicant_confirm_comment,
+        tug_fee.applicate_time,
+        tug_fee.admin_confirm_time,
+        tug_fee.caculate_time,
+        tug_fee.review_time,
+        tug_fee.applicant_confirm_time,
+        tug_fee.create_time,
+        tug_fee.update_time,
+        tug_fee.delete,
+        tug_fee.applicant_id,
+        tug_fee.reviewer_id,
+        tug_fee.caculator_id,
+        tug_fee.admin_id,
+        tug_fee.state,
+        tug_fee.ship_type,
+        tug_fee.work_type
+        from tug_fee
+        where tug_fee.delete = 0
+        <if test="shipName != null and shipName != ''">
+            and tug_fee.ship_name like concat('%',#{shipName},'%')
+        </if>
+        <if test="shipType != null and shipType != ''">
+            and tug_fee.ship_type = #{shipType}
+        </if>
+        <if test="startTime != null and startTime != ''">
+            and tug_fee.create_time &gt;= #{startTime}
+        </if>
+    </select>
+    <select id="queryById" resultMap="vo">
+        select tug_fee.id,
+               tug_fee.ship_name,
+               tug_fee.length,
+               tug_fee.depth,
+               tug_fee.work_place,
+               tug_fee.work_time,
+               tug_fee.tug_num,
+               tug_fee.tug_unit_price,
+               tug_fee.amount,
+               tug_fee.caculator_comment,
+               tug_fee.reviewer_comment,
+               tug_fee.applicant_comment,
+               tug_fee.applicant_confirm_comment,
+               tug_fee.applicate_time,
+               tug_fee.admin_confirm_time,
+               tug_fee.caculate_time,
+               tug_fee.review_time,
+               tug_fee.applicant_confirm_time,
+               tug_fee.create_time,
+               tug_fee.update_time,
+               tug_fee.delete,
+               tug_fee.applicant_id,
+               tug_fee.reviewer_id,
+               tug_fee.caculator_id,
+               tug_fee.admin_id,
+               tug_fee.state,
+               tug_fee.ship_type,
+               tug_fee.work_type
+        from tug_fee
+        where tug_fee.delete = 0
+          and tug_fee.id = #{id}
+    </select>
+    <select id="getFinishedList" resultMap="vo">
+        select tug_fee.id,
+               tug_fee.ship_name,
+               tug_fee.length,
+               tug_fee.depth,
+               tug_fee.work_place,
+               tug_fee.work_time,
+               tug_fee.tug_num,
+               tug_fee.tug_unit_price,
+               tug_fee.amount,
+               tug_fee.caculator_comment,
+               tug_fee.reviewer_comment,
+               tug_fee.applicant_comment,
+               tug_fee.applicant_confirm_comment,
+               tug_fee.applicate_time,
+               tug_fee.admin_confirm_time,
+               tug_fee.caculate_time,
+               tug_fee.review_time,
+               tug_fee.applicant_confirm_time,
+               tug_fee.create_time,
+               tug_fee.update_time,
+               tug_fee.delete,
+               tug_fee.applicant_id,
+               tug_fee.reviewer_id,
+               tug_fee.caculator_id,
+               tug_fee.admin_id,
+               tug_fee.state,
+               tug_fee.ship_type,
+               tug_fee.work_type
+        from tug_fee
+        where tug_fee.delete = 0
+          and tug_fee.applicant_id = #{userId}
+          and tug_fee.state = '3'
+    </select>
+</mapper>
