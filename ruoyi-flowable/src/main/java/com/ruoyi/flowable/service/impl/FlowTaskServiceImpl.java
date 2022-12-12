@@ -530,16 +530,9 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
 
                 if (StringUtils.isNotBlank(businessKey)) {
                     TugFeeVo tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
-                    if (tugFeeVo != null) {
-                        tugFeeVo.getReviewer().setPassword(null);
-                        tugFeeVo.getReviewer().setSalt(null);
-                        tugFeeVo.getCaculator().setPassword(null);
-                        tugFeeVo.getCaculator().setSalt(null);
-                        tugFeeVo.getAdmin().setPassword(null);
-                        tugFeeVo.getAdmin().setSalt(null);
-                        tugFeeVo.getApplicant().setPassword(null);
-                        tugFeeVo.getApplicant().setSalt(null);
-                    }
+
+                    setPasswordNull(tugFeeVo);
+
                     flowTask.setTugFeeVo(tugFeeVo);
                 }
             }
@@ -575,6 +568,28 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         }
         page.setRecords(flowList);
         return AjaxResult.success(page);
+    }
+
+    private void setPasswordNull(TugFeeVo tugFeeVo) {
+        if (tugFeeVo == null) {
+            return;
+        }
+        if (tugFeeVo.getReviewer() != null) {
+            tugFeeVo.getReviewer().setPassword(null);
+            tugFeeVo.getReviewer().setSalt(null);
+        }
+        if (tugFeeVo.getAdmin() != null) {
+            tugFeeVo.getAdmin().setPassword(null);
+            tugFeeVo.getAdmin().setSalt(null);
+        }
+        if (tugFeeVo.getCaculator() != null) {
+            tugFeeVo.getCaculator().setPassword(null);
+            tugFeeVo.getCaculator().setSalt(null);
+        }
+        if (tugFeeVo.getApplicant() != null) {
+            tugFeeVo.getApplicant().setPassword(null);
+            tugFeeVo.getApplicant().setSalt(null);
+        }
     }
 
     /**
@@ -1114,16 +1129,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             TugFeeVo tugFeeVo = null;
             if (StringUtils.isNotEmpty(businessKey)) {
                 tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
-                if (tugFeeVo != null) {
-                    tugFeeVo.getApplicant().setPassword(null);
-                    tugFeeVo.getApplicant().setSalt(null);
-                    tugFeeVo.getAdmin().setPassword(null);
-                    tugFeeVo.getAdmin().setSalt(null);
-                    tugFeeVo.getCaculator().setPassword(null);
-                    tugFeeVo.getCaculator().setSalt(null);
-                    tugFeeVo.getReviewer().setPassword(null);
-                    tugFeeVo.getReviewer().setSalt(null);
-                }
+                setPasswordNull(tugFeeVo);
             }
             flowTask.setTugFeeVo(tugFeeVo);
 
@@ -1186,16 +1192,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             TugFeeVo tugFeeVo = null;
             if (!(businessKey == null) && !"".equals(businessKey)) {
                 tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
-                if (tugFeeVo != null) {
-                    tugFeeVo.getApplicant().setPassword(null);
-                    tugFeeVo.getApplicant().setSalt(null);
-                    tugFeeVo.getAdmin().setPassword(null);
-                    tugFeeVo.getAdmin().setSalt(null);
-                    tugFeeVo.getCaculator().setPassword(null);
-                    tugFeeVo.getCaculator().setSalt(null);
-                    tugFeeVo.getReviewer().setPassword(null);
-                    tugFeeVo.getReviewer().setSalt(null);
-                }
+                setPasswordNull(tugFeeVo);
             }
 
             flowTask.setTugFeeVo(tugFeeVo);

@@ -30,6 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.List;
@@ -192,14 +193,17 @@ public class FlowDefinitionController {
             tugFee.setWorkType(workType);
             tugFee.setTugNum(tugNum);
             tugFee.setAmount(workTypeValue * tugNum);
+            tugFee.setTugUnitPrice(BigDecimal.valueOf(workTypeValue));
             tugFee.setWorkPlace(variables.get("workPlace").toString());
             tugFee.setApplicantComment(variables.get("applicant_comment").toString());
             tugFee.setApplicateTime(new Date());
             tugFee.setWorkTime(DateUtils.parseDate(variables.get("workTime").toString()));
             tugFee.setState("0");
 
-            int i = tugFeeService.insertTugFee(tugFee);
-            businessKey = String.valueOf(i);
+            tugFeeService.insertTugFee(tugFee);
+            System.out.println(tugFee);
+
+            businessKey = String.valueOf(tugFee.getId());
         }
 
         return flowDefinitionService.startProcessInstanceWithKeyById(procDefId, businessKey, variables);

@@ -36,13 +36,25 @@ public class AssigneeTaskListener implements TaskListener {
         if ("create".equals(delegateTask.getEventName())) {
             switch (delegateTask.getName()) {
                 case "计费员":
-                    delegateTask.setAssignee(tugFee.getCaculatorId().toString());
+                    if (tugFee.getCaculatorId() == null) {
+                        delegateTask.setAssignee("100");
+                    } else {
+                        delegateTask.setAssignee(tugFee.getCaculatorId().toString());
+                    }
                     break;
                 case "审核员":
-                    delegateTask.setAssignee(tugFee.getReviewerId().toString());
+                    if (tugFee.getReviewerId() == null) {
+                        delegateTask.setAssignee("100");
+                    } else {
+                        delegateTask.setAssignee(tugFee.getReviewerId().toString());
+                    }
                     break;
                 case "船代":
-                    delegateTask.setAssignee(tugFee.getApplicantId().toString());
+                    if (tugFee.getApplicantId() == null) {
+                        delegateTask.setAssignee("100");
+                    } else {
+                        delegateTask.setAssignee(tugFee.getApplicantId().toString());
+                    }
                     break;
                 default:
                     break;

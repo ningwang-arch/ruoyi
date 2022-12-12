@@ -46,14 +46,7 @@ public class BizUserServiceImpl implements IBizUserService {
         PageHelper.startPage(pageNum, pageSize);
         List<TugFeeVo> dataList = tugFeeVoMapper.getFinishedList(user.getUserId());
         for (TugFeeVo tugFeeVo : dataList) {
-            tugFeeVo.getApplicant().setPassword(null);
-            tugFeeVo.getApplicant().setSalt(null);
-            tugFeeVo.getAdmin().setPassword(null);
-            tugFeeVo.getAdmin().setSalt(null);
-            tugFeeVo.getCaculator().setPassword(null);
-            tugFeeVo.getCaculator().setSalt(null);
-            tugFeeVo.getReviewer().setPassword(null);
-            tugFeeVo.getReviewer().setSalt(null);
+            setPasswordNull(tugFeeVo);
         }
         page.setRecords(dataList);
         page.setTotal(new PageInfo<>(dataList).getTotal());
@@ -68,5 +61,27 @@ public class BizUserServiceImpl implements IBizUserService {
     @Override
     public AjaxResult getUserList(Integer role) {
         return AjaxResult.success(sysUserMapper.selectUserListByRoleId(role.longValue()));
+    }
+
+    private void setPasswordNull(TugFeeVo tugFeeVo) {
+        if (tugFeeVo == null) {
+            return;
+        }
+        if (tugFeeVo.getReviewer() != null) {
+            tugFeeVo.getReviewer().setPassword(null);
+            tugFeeVo.getReviewer().setSalt(null);
+        }
+        if (tugFeeVo.getAdmin() != null) {
+            tugFeeVo.getAdmin().setPassword(null);
+            tugFeeVo.getAdmin().setSalt(null);
+        }
+        if (tugFeeVo.getCaculator() != null) {
+            tugFeeVo.getCaculator().setPassword(null);
+            tugFeeVo.getCaculator().setSalt(null);
+        }
+        if (tugFeeVo.getApplicant() != null) {
+            tugFeeVo.getApplicant().setPassword(null);
+            tugFeeVo.getApplicant().setSalt(null);
+        }
     }
 }

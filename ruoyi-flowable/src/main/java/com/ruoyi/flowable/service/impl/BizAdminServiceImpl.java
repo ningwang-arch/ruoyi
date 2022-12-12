@@ -42,14 +42,7 @@ public class BizAdminServiceImpl implements IBizAdminService {
         params.put("shipType", shipType);
         final List<TugFeeVo> dataList = tugFeeVoMapper.queryByParams(params);
         for (TugFeeVo tugFeeVo : dataList) {
-            tugFeeVo.getApplicant().setPassword(null);
-            tugFeeVo.getApplicant().setSalt(null);
-            tugFeeVo.getAdmin().setPassword(null);
-            tugFeeVo.getAdmin().setSalt(null);
-            tugFeeVo.getCaculator().setPassword(null);
-            tugFeeVo.getCaculator().setSalt(null);
-            tugFeeVo.getReviewer().setPassword(null);
-            tugFeeVo.getReviewer().setSalt(null);
+            setPasswordNull(tugFeeVo);
         }
         page.setTotal(new PageInfo(dataList).getTotal());
         page.setRecords(dataList);
@@ -67,5 +60,27 @@ public class BizAdminServiceImpl implements IBizAdminService {
 
         return flowTaskService.flowRecord(processInstance.getId(), null);
 
+    }
+
+    private void setPasswordNull(TugFeeVo tugFeeVo) {
+        if (tugFeeVo == null) {
+            return;
+        }
+        if (tugFeeVo.getReviewer() != null) {
+            tugFeeVo.getReviewer().setPassword(null);
+            tugFeeVo.getReviewer().setSalt(null);
+        }
+        if (tugFeeVo.getAdmin() != null) {
+            tugFeeVo.getAdmin().setPassword(null);
+            tugFeeVo.getAdmin().setSalt(null);
+        }
+        if (tugFeeVo.getCaculator() != null) {
+            tugFeeVo.getCaculator().setPassword(null);
+            tugFeeVo.getCaculator().setSalt(null);
+        }
+        if (tugFeeVo.getApplicant() != null) {
+            tugFeeVo.getApplicant().setPassword(null);
+            tugFeeVo.getApplicant().setSalt(null);
+        }
     }
 }
