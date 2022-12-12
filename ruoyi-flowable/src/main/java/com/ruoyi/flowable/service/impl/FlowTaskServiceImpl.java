@@ -112,15 +112,18 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         TugFee tugFee = hook(task, taskVo);
         if (!(tugFee == null)) {
             switch (task.getName()) {
-                case "计费员":
+                case "管理员":
                     tugFee.setState("1");
+                    break;
+                case "计费员":
+                    tugFee.setState("2");
                     taskVo.getValues().put("approval", 1);
                     break;
                 case "审核员":
-                    tugFee.setState("2");
+                    tugFee.setState("3");
                     break;
                 case "船代":
-                    tugFee.setState("3");
+                    tugFee.setState("4");
                     break;
                 default:
                     break;
@@ -592,7 +595,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         String businessKey = processInstance.getBusinessKey();
         if (!StringUtils.isEmpty(businessKey)) {
             TugFee tugFee = tugFeeMapper.selectTugFeeById(Long.valueOf(businessKey));
-            tugFee.setDelete(1);
+            tugFee.setState("5");
             tugFeeMapper.updateTugFee(tugFee);
         }
         BpmnModel bpmnModel = repositoryService.getBpmnModel(processInstance.getProcessDefinitionId());

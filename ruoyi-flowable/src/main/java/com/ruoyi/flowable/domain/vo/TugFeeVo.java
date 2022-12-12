@@ -176,9 +176,4 @@ public class TugFeeVo implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-    /**
-     * 逻辑删除
-     */
-    @Excel(name = "逻辑删除")
-    private Integer delete;
 }

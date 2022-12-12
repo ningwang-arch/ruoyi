@@ -174,12 +174,6 @@ public class TugFee extends BaseEntity {
     @Excel(name = "船代确认时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date applicantConfirmTime;
 
-    /**
-     * 逻辑删除
-     */
-    @Excel(name = "逻辑删除")
-    private Integer delete;
-
     public Long getId() {
         return id;
     }
@@ -372,14 +366,6 @@ public class TugFee extends BaseEntity {
         this.applicantConfirmTime = applicantConfirmTime;
     }
 
-    public Integer getDelete() {
-        return delete;
-    }
-
-    public void setDelete(Integer delete) {
-        this.delete = delete;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -409,7 +395,6 @@ public class TugFee extends BaseEntity {
                 .append("applicantConfirmTime", getApplicantConfirmTime())
                 .append("createTime", getCreateTime())
                 .append("updateTime", getUpdateTime())
-                .append("delete", getDelete())
                 .toString();
     }
 }

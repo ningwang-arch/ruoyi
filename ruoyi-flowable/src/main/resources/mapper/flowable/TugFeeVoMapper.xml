@@ -24,7 +24,6 @@
         <result column="applicant_confirm_time" property="applicantConfirmTime"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
-        <result column="delete" property="delete"/>
 
         <association column="applicant_id" property="applicant" javaType="com.ruoyi.common.core.domain.entity.SysUser"
                      select="com.ruoyi.system.mapper.SysUserMapper.selectUserById"/>
@@ -86,7 +85,6 @@
         tug_fee.applicant_confirm_time,
         tug_fee.create_time,
         tug_fee.update_time,
-        tug_fee.delete,
         tug_fee.applicant_id,
         tug_fee.reviewer_id,
         tug_fee.caculator_id,
@@ -95,7 +93,7 @@
         tug_fee.ship_type,
         tug_fee.work_type
         from tug_fee
-        where tug_fee.delete = 0
+        where 1 = 1
         <if test="shipName != null and shipName != ''">
             and tug_fee.ship_name like concat('%',#{shipName},'%')
         </if>
@@ -127,7 +125,6 @@
                tug_fee.applicant_confirm_time,
                tug_fee.create_time,
                tug_fee.update_time,
-               tug_fee.delete,
                tug_fee.applicant_id,
                tug_fee.reviewer_id,
                tug_fee.caculator_id,
@@ -136,8 +133,7 @@
                tug_fee.ship_type,
                tug_fee.work_type
         from tug_fee
-        where tug_fee.delete = 0
-          and tug_fee.id = #{id}
+        where tug_fee.id = #{id}
     </select>
     <select id="getFinishedList" resultMap="vo">
         select tug_fee.id,
@@ -160,7 +156,6 @@
                tug_fee.applicant_confirm_time,
                tug_fee.create_time,
                tug_fee.update_time,
-               tug_fee.delete,
                tug_fee.applicant_id,
                tug_fee.reviewer_id,
                tug_fee.caculator_id,
@@ -169,8 +164,7 @@
                tug_fee.ship_type,
                tug_fee.work_type
         from tug_fee
-        where tug_fee.delete = 0
-          and tug_fee.applicant_id = #{userId}
-          and tug_fee.state = '3'
+        where tug_fee.applicant_id = #{userId}
+          and tug_fee.state = '4'
     </select>
 </mapper>
