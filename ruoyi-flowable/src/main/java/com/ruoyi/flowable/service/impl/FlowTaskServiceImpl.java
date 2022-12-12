@@ -530,6 +530,14 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
 
                 if (StringUtils.isNotBlank(businessKey)) {
                     TugFeeVo tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+                    tugFeeVo.getReviewer().setPassword(null);
+                    tugFeeVo.getReviewer().setSalt(null);
+                    tugFeeVo.getCaculator().setPassword(null);
+                    tugFeeVo.getCaculator().setSalt(null);
+                    tugFeeVo.getAdmin().setPassword(null);
+                    tugFeeVo.getAdmin().setSalt(null);
+                    tugFeeVo.getApplicant().setPassword(null);
+                    tugFeeVo.getApplicant().setSalt(null);
                     flowTask.setTugFeeVo(tugFeeVo);
                 }
             }
@@ -1104,6 +1112,14 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             TugFeeVo tugFeeVo = null;
             if (StringUtils.isNotEmpty(businessKey)) {
                 tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+                tugFeeVo.getApplicant().setPassword(null);
+                tugFeeVo.getApplicant().setSalt(null);
+                tugFeeVo.getAdmin().setPassword(null);
+                tugFeeVo.getAdmin().setSalt(null);
+                tugFeeVo.getCaculator().setPassword(null);
+                tugFeeVo.getCaculator().setSalt(null);
+                tugFeeVo.getReviewer().setPassword(null);
+                tugFeeVo.getReviewer().setSalt(null);
             }
             flowTask.setTugFeeVo(tugFeeVo);
 
@@ -1166,6 +1182,14 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             TugFeeVo tugFeeVo = null;
             if (!(businessKey == null) && !"".equals(businessKey)) {
                 tugFeeVo = tugFeeVoMapper.queryById(Long.valueOf(businessKey));
+                tugFeeVo.getApplicant().setPassword(null);
+                tugFeeVo.getApplicant().setSalt(null);
+                tugFeeVo.getAdmin().setPassword(null);
+                tugFeeVo.getAdmin().setSalt(null);
+                tugFeeVo.getCaculator().setPassword(null);
+                tugFeeVo.getCaculator().setSalt(null);
+                tugFeeVo.getReviewer().setPassword(null);
+                tugFeeVo.getReviewer().setSalt(null);
             }
 
             flowTask.setTugFeeVo(tugFeeVo);

@@ -45,6 +45,16 @@ public class BizUserServiceImpl implements IBizUserService {
         Page<TugFeeVo> page = new Page<>();
         PageHelper.startPage(pageNum, pageSize);
         List<TugFeeVo> dataList = tugFeeVoMapper.getFinishedList(user.getUserId());
+        for (TugFeeVo tugFeeVo : dataList) {
+            tugFeeVo.getApplicant().setPassword(null);
+            tugFeeVo.getApplicant().setSalt(null);
+            tugFeeVo.getAdmin().setPassword(null);
+            tugFeeVo.getAdmin().setSalt(null);
+            tugFeeVo.getCaculator().setPassword(null);
+            tugFeeVo.getCaculator().setSalt(null);
+            tugFeeVo.getReviewer().setPassword(null);
+            tugFeeVo.getReviewer().setSalt(null);
+        }
         page.setRecords(dataList);
         page.setTotal(new PageInfo<>(dataList).getTotal());
         return AjaxResult.success(page);

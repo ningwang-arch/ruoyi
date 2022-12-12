@@ -41,6 +41,16 @@ public class BizAdminServiceImpl implements IBizAdminService {
         params.put("startTime", startTime);
         params.put("shipType", shipType);
         final List<TugFeeVo> dataList = tugFeeVoMapper.queryByParams(params);
+        for (TugFeeVo tugFeeVo : dataList) {
+            tugFeeVo.getApplicant().setPassword(null);
+            tugFeeVo.getApplicant().setSalt(null);
+            tugFeeVo.getAdmin().setPassword(null);
+            tugFeeVo.getAdmin().setSalt(null);
+            tugFeeVo.getCaculator().setPassword(null);
+            tugFeeVo.getCaculator().setSalt(null);
+            tugFeeVo.getReviewer().setPassword(null);
+            tugFeeVo.getReviewer().setSalt(null);
+        }
         page.setTotal(new PageInfo(dataList).getTotal());
         page.setRecords(dataList);
 
