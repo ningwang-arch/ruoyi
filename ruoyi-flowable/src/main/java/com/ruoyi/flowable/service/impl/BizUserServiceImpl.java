@@ -12,6 +12,7 @@ import com.ruoyi.flowable.service.IBizUserService;
 import com.ruoyi.system.domain.FlowProcDefDto;
 import com.ruoyi.system.mapper.FlowDeployMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
+import com.ruoyi.system.mapper.SysUserMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,9 @@ public class BizUserServiceImpl implements IBizUserService {
 
     @Resource
     private SysDictDataMapper sysDictDataMapper;
+
+    @Resource
+    private SysUserMapper sysUserMapper;
 
     @Override
     public FlowProcDefDto getLatestRecord() {
@@ -49,5 +53,10 @@ public class BizUserServiceImpl implements IBizUserService {
     @Override
     public AjaxResult getDictData(String dictType) {
         return AjaxResult.success(sysDictDataMapper.selectDictDataByType(dictType));
+    }
+
+    @Override
+    public AjaxResult getUserList(Integer role) {
+        return AjaxResult.success(sysUserMapper.selectUserListByRoleId(role.longValue()));
     }
 }

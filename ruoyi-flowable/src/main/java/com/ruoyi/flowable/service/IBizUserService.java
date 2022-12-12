@@ -9,4 +9,6 @@ public interface IBizUserService {
     AjaxResult getFinishedList(Integer pageNum, Integer pageSize);
 
     AjaxResult getDictData(String dictType);
+
+    AjaxResult getUserList(Integer role);
 }

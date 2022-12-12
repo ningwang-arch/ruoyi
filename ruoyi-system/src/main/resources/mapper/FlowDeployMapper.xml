@@ -38,6 +38,7 @@
         FROM ACT_RE_PROCDEF rp
                  LEFT JOIN ACT_RE_DEPLOYMENT rd ON rp.deployment_id_ = rd.id_
 --         where rp.key_ = #{flowKey}
+        where rd.name_ = 'tug_fee'
         order by rp.version_ desc limit 1
     </select>
 

@@ -110,6 +110,26 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             return AjaxResult.error("任务不存在");
         }
         TugFee tugFee = hook(task, taskVo);
+        if (!(tugFee == null)) {
+            switch (task.getName()) {
+                case "管理员":
+                    tugFee.setState("0");
+                    break;
+                case "计费员":
+                    tugFee.setState("1");
+                    taskVo.getValues().put("approval", 1);
+                    break;
+                case "审核员":
+                    tugFee.setState("2");
+                    break;
+                case "船代":
+                    tugFee.setState("3");
+                    break;
+                default:
+                    break;
+            }
+            tugFeeMapper.updateTugFee(tugFee);
+        }
         if (DelegationState.PENDING.equals(task.getDelegationState())) {
             taskService.addComment(taskVo.getTaskId(), taskVo.getInstanceId(), FlowComment.DELEGATE.getType(), taskVo.getComment());
             taskService.resolveTask(taskVo.getTaskId(), taskVo.getValues());
@@ -119,26 +139,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             taskService.setAssignee(taskVo.getTaskId(), userId.toString());
             taskService.complete(taskVo.getTaskId(), taskVo.getValues());
         }
-        if (!(tugFee == null)) {
-            switch (task.getName()) {
-                case "管理员审批":
-                    tugFee.setState("0");
-                    break;
-                case "计费员审批":
-                    tugFee.setState("1");
-                    break;
-                case "核算员审批":
-                    tugFee.setState("2");
-                    break;
-                case "船代审批":
-                    tugFee.setState("3");
-                    break;
-                default:
-                    break;
-            }
 
-            tugFeeMapper.updateTugFee(tugFee);
-        }
         return AjaxResult.success();
     }
 
@@ -584,7 +585,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                         .processInstanceId(flowTaskVo.getInstanceId())
                         .singleResult();
         String businessKey = processInstance.getBusinessKey();
-        if (StringUtils.isEmpty(businessKey)) {
+        if (!StringUtils.isEmpty(businessKey)) {
             TugFee tugFee = tugFeeMapper.selectTugFeeById(Long.valueOf(businessKey));
             tugFee.setDelete(1);
             tugFeeMapper.updateTugFee(tugFee);
@@ -1199,35 +1200,26 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             return null;
         }
         switch (name) {
-            case "管理员审批":
-                // todo: 是否需要设置 船代审批 的 assignee?
+            case "管理员":
                 SysUser sysUser = SecurityUtils.getLoginUser().getUser();
-                Task next_task = getNextTask(task);
-                if (next_task != null) {
-                    taskService.setAssignee(next_task.getId(), String.valueOf(taskVo.getCommentData().getCalculatorId()));
-                    next_task = getNextTask(next_task);
-                    if (next_task != null) {
-                        taskService.setAssignee(next_task.getId(), String.valueOf(taskVo.getCommentData().getReviewerId()));
-                    }
-                }
                 tugFee.setAdminId(sysUser.getUserId());
                 tugFee.setCaculatorId(taskVo.getCommentData().getCalculatorId());
                 tugFee.setReviewerId(taskVo.getCommentData().getReviewerId());
                 tugFee.setAdminConfirmTime(new Date());
                 taskVo.setComment("管理员 " + sysUser.getNickName() + " 审批通过");
                 break;
-            case "计费员审批":
+            case "计费员":
                 tugFee.setAmount(taskVo.getCommentData().getAmount());
                 tugFee.setCaculateTime(new Date());
                 tugFee.setCaculatorComment(taskVo.getCommentData().getCalculatorComment());
                 taskVo.setComment(taskVo.getCommentData().getCalculatorComment());
                 break;
-            case "审核员审批":
+            case "审核员":
                 tugFee.setReviewTime(new Date());
                 tugFee.setReviewerComment(taskVo.getCommentData().getReviewerComment());
                 taskVo.setComment(taskVo.getCommentData().getReviewerComment());
                 break;
-            case "船代审批":
+            case "船代":
                 tugFee.setApplicantConfirmTime(new Date());
                 tugFee.setApplicantComment(taskVo.getCommentData().getApplicantComment());
                 taskVo.setComment(taskVo.getCommentData().getApplicantComment());

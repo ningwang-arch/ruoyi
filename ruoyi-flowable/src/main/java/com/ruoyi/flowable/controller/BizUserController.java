@@ -41,4 +41,9 @@ public class BizUserController {
     public AjaxResult getDictData(@ApiParam(value = "字典类型", required = true) @RequestParam String dictType) {
         return bizUserService.getDictData(dictType);
     }
+
+    @GetMapping("/getUserList")
+    public AjaxResult getUserList(@ApiParam(value = "角色", required = true) @RequestParam Integer role) {
+        return bizUserService.getUserList(role);
+    }
 }
