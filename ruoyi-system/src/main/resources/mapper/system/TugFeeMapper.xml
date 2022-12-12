@@ -61,7 +61,7 @@
                applicant_confirm_time,
                create_time,
                update_time,
-        delete
+               `delete`
         from tug_fee
     </sql>
 
