@@ -4,6 +4,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.flowable.domain.dto.FlowSaveXmlVo;
 import com.ruoyi.flowable.service.IFlowDefinitionService;
@@ -194,6 +195,7 @@ public class FlowDefinitionController {
             tugFee.setWorkPlace(variables.get("workPlace").toString());
             tugFee.setApplicantComment(variables.get("applicant_comment").toString());
             tugFee.setApplicateTime(new Date());
+            tugFee.setWorkTime(DateUtils.parseDate(variables.get("workTime").toString()));
             tugFee.setState("0");
 
             int i = tugFeeService.insertTugFee(tugFee);
