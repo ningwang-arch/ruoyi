@@ -194,6 +194,7 @@ public class FlowDefinitionController {
             tugFee.setWorkPlace(variables.get("workPlace").toString());
             tugFee.setApplicantComment(variables.get("applicant_comment").toString());
             tugFee.setApplicateTime(new Date());
+            tugFee.setState("0");
 
             int i = tugFeeService.insertTugFee(tugFee);
             businessKey = String.valueOf(i);

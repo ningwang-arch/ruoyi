@@ -112,9 +112,6 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         TugFee tugFee = hook(task, taskVo);
         if (!(tugFee == null)) {
             switch (task.getName()) {
-                case "管理员":
-                    tugFee.setState("0");
-                    break;
                 case "计费员":
                     tugFee.setState("1");
                     taskVo.getValues().put("approval", 1);
