@@ -59,7 +59,7 @@
                review_time,
                applicant_confirm_time,
                create_time,
-               update_time,
+               update_time
         from tug_fee
     </sql>
 
