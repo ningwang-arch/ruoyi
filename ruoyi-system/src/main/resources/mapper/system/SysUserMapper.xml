@@ -136,15 +136,8 @@
         from sys_user
         where email = #{email} limit 1
     </select>
-    <select id="selectUserListByRoleId" resultType="com.ruoyi.common.core.domain.entity.SysUser">
-        select u.user_id,
-               u.dept_id,
-               u.user_name,
-               u.nick_name,
-               u.email,
-               u.avatar,
-               u.phonenumber,
-               u.password
+    <select id="selectUserListByRoleId" resultMap="SysUserResult">
+        select u.*
         from sys_user u
                  inner join sys_user_role ur on u.user_id = ur.user_id
                  inner join sys_role r on r.role_id = ur.role_id
