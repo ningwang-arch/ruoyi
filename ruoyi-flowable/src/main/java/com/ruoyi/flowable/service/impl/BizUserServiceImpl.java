@@ -60,7 +60,13 @@ public class BizUserServiceImpl implements IBizUserService {
 
     @Override
     public AjaxResult getUserList(Integer role) {
-        return AjaxResult.success(sysUserMapper.selectUserListByRoleId(role.longValue()));
+        List<SysUser> users = sysUserMapper.selectUserListByRoleId(Long.valueOf(role));
+        for (SysUser user : users) {
+            user.setPassword(null);
+            user.setSalt(null);
+        }
+
+        return AjaxResult.success(users);
     }
 
     private void setPasswordNull(TugFeeVo tugFeeVo) {
