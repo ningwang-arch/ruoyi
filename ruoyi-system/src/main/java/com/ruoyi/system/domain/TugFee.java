@@ -87,6 +87,9 @@ public class TugFee extends BaseEntity {
     @Excel(name = "应付费用")
     private Long amount;
 
+    @Excel(name = "计算费用")
+    private Long caculateAmount;
+
     /**
      * 状态,已提交：0，已计费：1
      * 已审核：2
@@ -366,6 +369,14 @@ public class TugFee extends BaseEntity {
         this.applicantConfirmTime = applicantConfirmTime;
     }
 
+    public Long getCaculateAmount() {
+        return caculateAmount;
+    }
+
+    public void setCaculateAmount(Long caculateAmount) {
+        this.caculateAmount = caculateAmount;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -395,6 +406,7 @@ public class TugFee extends BaseEntity {
                 .append("applicantConfirmTime", getApplicantConfirmTime())
                 .append("createTime", getCreateTime())
                 .append("updateTime", getUpdateTime())
+                .append("caculateAmount", caculateAmount)
                 .toString();
     }
 }

@@ -31,6 +31,7 @@
         <result property="applicantConfirmTime" column="applicant_confirm_time"/>
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
+        <result property="caculateAmount" column="caculate_amount"/>
     </resultMap>
 
     <sql id="selectTugFeeVo">
@@ -59,7 +60,8 @@
                review_time,
                applicant_confirm_time,
                create_time,
-               update_time
+               update_time,
+               caculate_amount
         from tug_fee
     </sql>
 
@@ -93,6 +95,7 @@
             <if test="caculateTime != null ">and caculate_time = #{caculateTime}</if>
             <if test="reviewTime != null ">and review_time = #{reviewTime}</if>
             <if test="applicantConfirmTime != null ">and applicant_confirm_time = #{applicantConfirmTime}</if>
+            <if test="caculateAmount != null">and caculate_amount = #{caculateAmount}</if>
         </where>
     </select>
 
@@ -133,6 +136,7 @@
             <if test="applicantConfirmTime != null">applicant_confirm_time,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
+            <if test="caculateAmount != null">caculate_amount,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -161,6 +165,7 @@
             <if test="applicantConfirmTime != null">#{applicantConfirmTime},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
+            <if test="caculateAmount != null">#{caculateAmount},</if>
         </trim>
     </insert>
 
@@ -192,6 +197,7 @@
             <if test="applicantConfirmTime != null">applicant_confirm_time = #{applicantConfirmTime},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="caculateAmount != null">caculate_amount = #{caculateAmount},</if>
         </trim>
         where id = #{id}
     </update>

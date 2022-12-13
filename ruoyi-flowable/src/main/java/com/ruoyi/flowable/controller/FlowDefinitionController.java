@@ -192,7 +192,7 @@ public class FlowDefinitionController {
             tugFee.setDepth((long) Double.parseDouble(variables.get("depth").toString()));
             tugFee.setWorkType(workType);
             tugFee.setTugNum(tugNum);
-            tugFee.setAmount(workTypeValue * tugNum);
+            tugFee.setCaculateAmount(workTypeValue * tugNum);
             tugFee.setTugUnitPrice(BigDecimal.valueOf(workTypeValue));
             tugFee.setWorkPlace(variables.get("workPlace").toString());
             tugFee.setApplicantComment(variables.get("applicant_comment").toString());

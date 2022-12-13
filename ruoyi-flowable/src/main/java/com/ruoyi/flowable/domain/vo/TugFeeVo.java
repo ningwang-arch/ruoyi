@@ -84,6 +84,9 @@ public class TugFeeVo implements Serializable {
     @Excel(name = "应付费用")
     private Long amount;
 
+    @Excel(name = "申请人")
+    private Long caculateAmount;
+
     /**
      * 状态,已提交：0，已计费：1
      * 已审核：2

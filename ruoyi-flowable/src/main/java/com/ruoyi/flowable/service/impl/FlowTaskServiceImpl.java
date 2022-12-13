@@ -1225,9 +1225,9 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         if (tugFee == null) {
             return null;
         }
+        SysUser sysUser = SecurityUtils.getLoginUser().getUser();
         switch (name) {
             case "管理员":
-                SysUser sysUser = SecurityUtils.getLoginUser().getUser();
                 tugFee.setAdminId(sysUser.getUserId());
                 tugFee.setCaculatorId(taskVo.getCommentData().getCalculatorId());
                 tugFee.setReviewerId(taskVo.getCommentData().getReviewerId());
@@ -1253,6 +1253,8 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             default:
                 break;
         }
+        tugFee.setUpdateTime(new Date());
+        tugFee.setUpdateBy(sysUser.getUserName());
         return tugFee;
     }
 

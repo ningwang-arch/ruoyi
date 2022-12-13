@@ -24,6 +24,7 @@
         <result column="applicant_confirm_time" property="applicantConfirmTime"/>
         <result column="create_time" property="createTime"/>
         <result column="update_time" property="updateTime"/>
+        <result column="caculate_amount" property="caculateAmount"/>
 
         <association column="applicant_id" property="applicant" javaType="com.ruoyi.common.core.domain.entity.SysUser"
                      select="com.ruoyi.system.mapper.SysUserMapper.selectUserById"/>
@@ -85,6 +86,7 @@
         tug_fee.applicant_confirm_time,
         tug_fee.create_time,
         tug_fee.update_time,
+        tug_fee.caculate_amount,
         tug_fee.applicant_id,
         tug_fee.reviewer_id,
         tug_fee.caculator_id,
@@ -125,6 +127,7 @@
                tug_fee.applicant_confirm_time,
                tug_fee.create_time,
                tug_fee.update_time,
+               tug_fee.caculate_amount,
                tug_fee.applicant_id,
                tug_fee.reviewer_id,
                tug_fee.caculator_id,
@@ -156,6 +159,7 @@
                tug_fee.applicant_confirm_time,
                tug_fee.create_time,
                tug_fee.update_time,
+               tug_fee.caculate_amount,
                tug_fee.applicant_id,
                tug_fee.reviewer_id,
                tug_fee.caculator_id,
