@@ -201,7 +201,6 @@ public class FlowDefinitionController {
             tugFee.setState("0");
 
             tugFeeService.insertTugFee(tugFee);
-            System.out.println(tugFee);
 
             businessKey = String.valueOf(tugFee.getId());
         }

@@ -117,7 +117,6 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     break;
                 case "计费员":
                     tugFee.setState("2");
-                    taskVo.getValues().put("approval", 1);
                     break;
                 case "审核员":
                     tugFee.setState("3");
@@ -136,7 +135,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         } else {
             taskService.addComment(taskVo.getTaskId(), taskVo.getInstanceId(), FlowComment.NORMAL.getType(), taskVo.getComment());
             Long userId = SecurityUtils.getLoginUser().getUser().getUserId();
-            taskService.setAssignee(taskVo.getTaskId(), userId.toString());
+            taskService.setAssignee(taskVo.getTaskId(), userId.toString()); // ?
             taskService.complete(taskVo.getTaskId(), taskVo.getValues());
         }
 

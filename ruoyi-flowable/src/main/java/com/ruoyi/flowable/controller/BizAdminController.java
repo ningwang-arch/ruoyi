@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Date;
-
 @Slf4j
 @Api(tags = "流程定义")
 @RestController
@@ -28,12 +26,9 @@ public class BizAdminController {
     @GetMapping("/myProcess")
     @ApiOperation(value = "获取我的流程", response = TugFeeVo.class)
     public AjaxResult myProcess(@ApiParam(value = "当前页码", required = true) @RequestParam Integer pageNum,
-                                @ApiParam(value = "每页条数", required = true) @RequestParam Integer pageSize,
-                                @ApiParam(value = "船名") @RequestParam(required = false) String name,
-                                @ApiParam(value = "开始时间") @RequestParam(required = false) Date startTime,
-                                @ApiParam(value = "船舶类型") @RequestParam(required = false) String shipType
+                                @ApiParam(value = "每页条数", required = true) @RequestParam Integer pageSize
     ) {
-        return bizAdminService.myProcess(pageNum, pageSize, name, startTime, shipType);
+        return bizAdminService.myProcess(pageNum, pageSize);
     }
 
     @GetMapping("/record")
