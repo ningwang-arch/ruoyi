@@ -65,8 +65,8 @@ public class TugFee extends BaseEntity {
     /**
      * 作业时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "作业时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "作业时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date workTime;
 
     /**
@@ -145,36 +145,36 @@ public class TugFee extends BaseEntity {
     /**
      * 提交申请时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "提交申请时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "提交申请时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date applicateTime;
 
     /**
      * 管理员确认时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "管理员确认时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "管理员确认时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date adminConfirmTime;
 
     /**
      * 计费员计费时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "计费员计费时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "计费员计费时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date caculateTime;
 
     /**
      * 复核员复合时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "复核员复合时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "复核员复合时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date reviewTime;
 
     /**
      * 船代确认时间
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "船代确认时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "船代确认时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date applicantConfirmTime;
 
     public Long getId() {
