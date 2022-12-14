@@ -3,6 +3,7 @@ package com.ruoyi.flowable.controller;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.flowable.domain.dto.BizFlowTaskDto;
 import com.ruoyi.flowable.domain.dto.FlowTaskDto;
+import com.ruoyi.flowable.domain.dto.FlowTaskWithCommentDto;
 import com.ruoyi.flowable.domain.vo.BizFlowTaskVo;
 import com.ruoyi.flowable.domain.vo.FlowTaskVo;
 import com.ruoyi.flowable.service.IFlowTaskService;
@@ -70,7 +71,7 @@ public class FlowTaskController {
     }
 
 
-    @ApiOperation(value = "流程历史流转记录", response = FlowTaskDto.class)
+    @ApiOperation(value = "流程历史流转记录", response = FlowTaskWithCommentDto.class)
     @GetMapping(value = "/flowRecord")
     public AjaxResult flowRecord(String procInsId, String deployId) {
         return flowTaskService.flowRecord(procInsId, deployId);
