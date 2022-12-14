@@ -835,6 +835,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     flowTask.setTaskName(histIns.getActivityName());
                     flowTask.setCreateTime(histIns.getStartTime());
                     flowTask.setFinishTime(histIns.getEndTime());
+                    flowTask.setCommentData(new CommentData());
 
 
                     if (StringUtils.isNotBlank(histIns.getAssignee())) {

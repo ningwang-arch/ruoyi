@@ -34,6 +34,10 @@ public class CommentData implements Serializable {
         }
     }
 
+    public static void main(String[] args) {
+        CommentData commentData = CommentData.fromString("abc");
+        System.out.println(commentData);
+    }
 
     public String toString() {
         return JSON.toJSONString(this);
