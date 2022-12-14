@@ -20,10 +20,18 @@ public class CommentData implements Serializable {
     private String applicantComment;
 
     public static CommentData fromString(String str) {
-        return JSON.parseObject(str, CommentData.class);
+        try {
+            return JSON.parseObject(str, CommentData.class);
+        } catch (Exception e) {
+            return new CommentData();
+        }
     }
+    
 
     public String toString() {
         return JSON.toJSONString(this);
     }
+
 }
+
+
