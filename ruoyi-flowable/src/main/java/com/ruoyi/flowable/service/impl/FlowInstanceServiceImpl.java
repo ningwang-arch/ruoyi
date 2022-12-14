@@ -6,6 +6,7 @@ import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.flowable.domain.vo.FlowTaskVo;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
 import com.ruoyi.flowable.service.IFlowInstanceService;
+import com.ruoyi.system.mapper.TugFeeMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.flowable.common.engine.api.FlowableObjectNotFoundException;
 import org.flowable.engine.history.HistoricProcessInstance;
@@ -13,6 +14,7 @@ import org.flowable.task.api.Task;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,6 +29,8 @@ import java.util.Objects;
 @Slf4j
 public class FlowInstanceServiceImpl extends FlowServiceFactory implements IFlowInstanceService {
 
+    @Resource
+    TugFeeMapper tugFeeMapper;
 
     @Override
     public List<Task> queryListByInstanceId(String instanceId) {
@@ -80,6 +84,13 @@ public class FlowInstanceServiceImpl extends FlowServiceFactory implements IFlow
             historyService.deleteHistoricProcessInstance(historicProcessInstance.getId());
             return;
         }
+
+        String businessKey = historicProcessInstance.getBusinessKey();
+
+        if (businessKey != null) {
+            tugFeeMapper.deleteTugFeeById(Long.valueOf(businessKey));
+        }
+
         // 删除流程实例
         runtimeService.deleteProcessInstance(instanceId, deleteReason);
         // 删除历史流程实例
