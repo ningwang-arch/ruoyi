@@ -11,6 +11,7 @@ import com.ruoyi.common.exception.CustomException;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.flowable.common.constant.ProcessConstants;
 import com.ruoyi.flowable.common.enums.FlowComment;
+import com.ruoyi.flowable.domain.CommentData;
 import com.ruoyi.flowable.domain.dto.*;
 import com.ruoyi.flowable.domain.vo.BizFlowTaskVo;
 import com.ruoyi.flowable.domain.vo.FlowTaskVo;
@@ -829,7 +830,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
             List<FlowTaskDto> hisFlowList = new ArrayList<>();
             for (HistoricActivityInstance histIns : list) {
                 if (StringUtils.isNotBlank(histIns.getTaskId())) {
-                    FlowTaskDto flowTask = new FlowTaskDto();
+                    FlowTaskWithCommentDto flowTask = new FlowTaskWithCommentDto();
                     flowTask.setTaskId(histIns.getTaskId());
                     flowTask.setTaskName(histIns.getActivityName());
                     flowTask.setCreateTime(histIns.getStartTime());
@@ -868,6 +869,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     commentList.forEach(comment -> {
                         if (histIns.getTaskId().equals(comment.getTaskId())) {
                             flowTask.setComment(FlowCommentDto.builder().type(comment.getType()).comment(comment.getFullMessage()).build());
+                            flowTask.setCommentData(CommentData.fromString(comment.getFullMessage()));
                         }
                     });
                     hisFlowList.add(flowTask);
@@ -1232,27 +1234,24 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                 tugFee.setCaculatorId(taskVo.getCommentData().getCalculatorId());
                 tugFee.setReviewerId(taskVo.getCommentData().getReviewerId());
                 tugFee.setAdminConfirmTime(new Date());
-                taskVo.setComment("管理员 " + sysUser.getNickName() + " 审批通过");
                 break;
             case "计费员":
                 tugFee.setAmount(taskVo.getCommentData().getAmount());
                 tugFee.setCaculateTime(new Date());
                 tugFee.setCaculatorComment(taskVo.getCommentData().getCalculatorComment());
-                taskVo.setComment(taskVo.getCommentData().getCalculatorComment());
                 break;
             case "审核员":
                 tugFee.setReviewTime(new Date());
                 tugFee.setReviewerComment(taskVo.getCommentData().getReviewerComment());
-                taskVo.setComment(taskVo.getCommentData().getReviewerComment());
                 break;
             case "船代":
                 tugFee.setApplicantConfirmTime(new Date());
                 tugFee.setApplicantComment(taskVo.getCommentData().getApplicantComment());
-                taskVo.setComment(taskVo.getCommentData().getApplicantComment());
                 break;
             default:
                 break;
         }
+        taskVo.setComment(taskVo.getCommentData().toString());
         tugFee.setUpdateTime(new Date());
         tugFee.setUpdateBy(sysUser.getUserName());
         return tugFee;

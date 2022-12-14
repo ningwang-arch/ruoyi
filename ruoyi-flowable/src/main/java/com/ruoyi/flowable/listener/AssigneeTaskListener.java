@@ -46,7 +46,6 @@ public class AssigneeTaskListener implements TaskListener {
                 case "计费员":
                     if (tugFee.getCaculatorId() == null) {
                         taskService.setAssignee(delegateTask.getId(), "100");
-
                     } else {
                         taskService.setAssignee(delegateTask.getId(), tugFee.getCaculatorId().toString());
                     }
@@ -60,7 +59,6 @@ public class AssigneeTaskListener implements TaskListener {
                     break;
                 case "船代":
                     if (tugFee.getApplicantId() == null) {
-                        delegateTask.setAssignee("100");
                         taskService.setAssignee(delegateTask.getId(), "100");
                     } else {
                         taskService.setAssignee(delegateTask.getId(), tugFee.getApplicantId().toString());
