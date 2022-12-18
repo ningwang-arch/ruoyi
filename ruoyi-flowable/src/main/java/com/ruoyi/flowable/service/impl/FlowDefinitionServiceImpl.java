@@ -3,16 +3,16 @@ package com.ruoyi.flowable.service.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ruoyi.flowable.base_service.BizRuntimeService;
-import com.ruoyi.flowable.common.constant.ProcessConstants;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysUser;
-import com.ruoyi.flowable.common.enums.FlowComment;
 import com.ruoyi.common.utils.SecurityUtils;
-import com.ruoyi.system.domain.FlowProcDefDto;
+import com.ruoyi.flowable.base_service.BizRuntimeService;
+import com.ruoyi.flowable.common.constant.ProcessConstants;
+import com.ruoyi.flowable.common.enums.FlowComment;
 import com.ruoyi.flowable.factory.FlowServiceFactory;
 import com.ruoyi.flowable.service.IFlowDefinitionService;
 import com.ruoyi.flowable.service.ISysDeployFormService;
+import com.ruoyi.system.domain.FlowProcDefDto;
 import com.ruoyi.system.domain.SysForm;
 import com.ruoyi.system.mapper.FlowDeployMapper;
 import com.ruoyi.system.service.ISysDeptService;
@@ -20,7 +20,6 @@ import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.repository.Deployment;
 import org.flowable.engine.repository.ProcessDefinition;
@@ -28,7 +27,6 @@ import org.flowable.engine.repository.ProcessDefinitionQuery;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.flowable.image.impl.DefaultProcessDiagramGenerator;
 import org.flowable.task.api.Task;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +34,10 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * 流程定义
@@ -48,32 +49,26 @@ import java.util.*;
 @Slf4j
 public class FlowDefinitionServiceImpl extends FlowServiceFactory implements IFlowDefinitionService {
 
+    private static final String BPMN_FILE_SUFFIX = ".bpmn";
     @Resource
     private ISysDeployFormService sysDeployFormService;
-
     @Resource
     private ISysUserService sysUserService;
-
     @Resource
     private ISysDeptService sysDeptService;
-
     @Resource
     private ISysPostService postService;
-
     @Autowired
     private BizRuntimeService bizRuntimeService;
-
     @Resource
     private FlowDeployMapper flowDeployMapper;
-
-    private static final String BPMN_FILE_SUFFIX = ".bpmn";
 
     @Override
     public boolean exist(String processDefinitionKey) {
         ProcessDefinitionQuery processDefinitionQuery
                 = repositoryService.createProcessDefinitionQuery().processDefinitionKey(processDefinitionKey);
         long count = processDefinitionQuery.count();
-        return count > 0 ? true : false;
+        return count > 0;
     }
 
 
@@ -152,7 +147,7 @@ public class FlowDefinitionServiceImpl extends FlowServiceFactory implements IFl
     public AjaxResult readXml(String deployId) throws IOException {
         ProcessDefinition definition = repositoryService.createProcessDefinitionQuery().deploymentId(deployId).singleResult();
         InputStream inputStream = repositoryService.getResourceAsStream(definition.getDeploymentId(), definition.getResourceName());
-        String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8.name());
+        String result = IOUtils.toString(inputStream, StandardCharsets.UTF_8);
         return AjaxResult.success("", result);
     }
 
@@ -239,13 +234,13 @@ public class FlowDefinitionServiceImpl extends FlowServiceFactory implements IFl
             Task task = taskService.createTaskQuery().processInstanceId(processInstance.getProcessInstanceId()).singleResult();
             if (Objects.nonNull(task)) {
                 taskService.addComment(task.getId(), processInstance.getProcessInstanceId(), FlowComment.NORMAL.getType(), sysUser.getNickName() + "发起流程申请");
-//                taskService.setAssignee(task.getId(), sysUser.getUserId().toString());
+                taskService.setAssignee(task.getId(), sysUser.getUserId().toString());
                 taskService.complete(task.getId(), variables);
             }
-            return AjaxResult.success("流程启动成功");
+            return AjaxResult.success("流程申请成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return AjaxResult.error("流程启动错误");
+            return AjaxResult.error("流程申请失败");
         }
     }
 

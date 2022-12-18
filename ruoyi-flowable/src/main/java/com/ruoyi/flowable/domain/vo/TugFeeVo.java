@@ -139,6 +139,8 @@ public class TugFeeVo implements Serializable {
 
     private String applicantConfirmComment;
 
+    private String img;
+
     /**
      * 提交申请时间
      */

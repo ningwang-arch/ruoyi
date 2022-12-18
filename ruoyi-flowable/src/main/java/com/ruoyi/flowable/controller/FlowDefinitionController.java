@@ -5,7 +5,6 @@ import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysRole;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.flowable.domain.dto.FlowSaveXmlVo;
 import com.ruoyi.flowable.service.IFlowDefinitionService;
 import com.ruoyi.system.domain.FlowProcDefDto;
@@ -169,23 +168,24 @@ public class FlowDefinitionController {
     public AjaxResult start(@ApiParam(value = "流程定义id") @PathVariable(value = "procDefId") String procDefId,
                             @ApiParam(value = "变量集合,json对象") @RequestBody Map<String, Object> variables) {
         List<SysDictData> sysDictData = sysDictDataMapper.selectDictDataByType("sys_work_type");
-        String workType = variables.get("workType").toString(); // dict_code
-        long tugNum = Long.parseLong(variables.get("tugNum").toString());
-        int workTypeValue = 0;
-        for (SysDictData dictData : sysDictData) {
-            if (dictData.getDictCode().equals(Long.parseLong(workType))) {
-                workTypeValue = Integer.parseInt(dictData.getDictValue());
-                break;
-            }
-        }
         String businessKey = null;
 
-        SysUser user = SecurityUtils.getLoginUser().getUser();
         // insert tug_fee
         // generate business_key
         if (variables.containsKey("shipName")) {
+
+            String workType = variables.get("workType").toString(); // dict_code
+            long tugNum = Long.parseLong(variables.get("tugNum").toString());
+            int workTypeValue = 0;
+            for (SysDictData dictData : sysDictData) {
+                if (dictData.getDictCode().equals(Long.parseLong(workType))) {
+                    workTypeValue = Integer.parseInt(dictData.getDictValue());
+                    break;
+                }
+            }
+
             TugFee tugFee = new TugFee();
-            tugFee.setApplicantId(user.getUserId());
+            tugFee.setApplicantId(Long.valueOf(variables.get("applicantId").toString()));
             tugFee.setShipName(variables.get("shipName").toString());
             tugFee.setLength((long) Double.parseDouble(variables.get("length").toString()));
             tugFee.setShipType(variables.get("shipType").toString());
@@ -195,7 +195,7 @@ public class FlowDefinitionController {
             tugFee.setCaculateAmount(workTypeValue * tugNum);
             tugFee.setTugUnitPrice(BigDecimal.valueOf(workTypeValue));
             tugFee.setWorkPlace(variables.get("workPlace").toString());
-            tugFee.setApplicantComment(variables.get("applicant_comment").toString());
+            tugFee.setApplicantComment(variables.get("applicantComment").toString());
             tugFee.setApplicateTime(new Date());
             tugFee.setWorkTime(DateUtils.parseDate(variables.get("workTime").toString()));
             tugFee.setState("0");

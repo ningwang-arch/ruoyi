@@ -32,6 +32,7 @@
         <result property="createTime" column="create_time"/>
         <result property="updateTime" column="update_time"/>
         <result property="caculateAmount" column="caculate_amount"/>
+        <result property="img" column="img"/>
     </resultMap>
 
     <sql id="selectTugFeeVo">
@@ -61,7 +62,8 @@
                applicant_confirm_time,
                create_time,
                update_time,
-               caculate_amount
+               caculate_amount,
+               img
         from tug_fee
     </sql>
 
@@ -96,6 +98,7 @@
             <if test="reviewTime != null ">and review_time = #{reviewTime}</if>
             <if test="applicantConfirmTime != null ">and applicant_confirm_time = #{applicantConfirmTime}</if>
             <if test="caculateAmount != null">and caculate_amount = #{caculateAmount}</if>
+            <if test="img !=null">and img = #{img}</if>
         </where>
     </select>
 
@@ -137,6 +140,7 @@
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="caculateAmount != null">caculate_amount,</if>
+            <if test="img != null">img,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -166,6 +170,7 @@
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="caculateAmount != null">#{caculateAmount},</if>
+            <if test="img != null">#{img},</if>
         </trim>
     </insert>
 
@@ -198,6 +203,7 @@
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="caculateAmount != null">caculate_amount = #{caculateAmount},</if>
+            <if test="img != null">img = #{img},</if>
         </trim>
         where id = #{id}
     </update>

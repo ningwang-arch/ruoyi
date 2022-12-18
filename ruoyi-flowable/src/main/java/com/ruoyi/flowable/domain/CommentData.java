@@ -1,13 +1,17 @@
 package com.ruoyi.flowable.domain;
 
 import com.alibaba.fastjson.JSON;
+import com.ruoyi.common.utils.StringUtils;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
-@Data
+
 @AllArgsConstructor
+@Getter
+@Setter
 public class CommentData implements Serializable {
     private static final long serialVersionUID = 1L;
     private Long calculatorId;
@@ -27,6 +31,9 @@ public class CommentData implements Serializable {
     }
 
     public static CommentData fromString(String str) {
+        if (StringUtils.isBlank(str)) {
+            return new CommentData();
+        }
         try {
             return JSON.parseObject(str, CommentData.class);
         } catch (Exception e) {
@@ -37,6 +44,9 @@ public class CommentData implements Serializable {
     public static void main(String[] args) {
         CommentData commentData = CommentData.fromString("abc");
         System.out.println(commentData);
+
+        CommentData cd = new CommentData();
+        System.out.println(cd);
     }
 
     public String toString() {

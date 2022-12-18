@@ -23,6 +23,7 @@ import com.ruoyi.flowable.flow.FlowableUtils;
 import com.ruoyi.flowable.mapper.TugFeeVoMapper;
 import com.ruoyi.flowable.service.IFlowTaskService;
 import com.ruoyi.flowable.service.ISysDeployFormService;
+import com.ruoyi.flowable.utils.OssUtils;
 import com.ruoyi.system.domain.SysForm;
 import com.ruoyi.system.domain.TugFee;
 import com.ruoyi.system.mapper.TugFeeMapper;
@@ -70,19 +71,15 @@ import java.util.function.Predicate;
 public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTaskService {
 
     @Resource
+    private OssUtils ossUtils;
+    @Resource
     private ISysUserService sysUserService;
-
-
     @Resource
     private ISysRoleService sysRoleService;
-
     @Resource
     private TugFeeVoMapper tugFeeVoMapper;
-
     @Resource
     private TugFeeMapper tugFeeMapper;
-
-
     @Resource
     private ISysDeployFormService sysInstanceFormService;
 
@@ -121,9 +118,20 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     break;
                 case "审核员":
                     tugFee.setState("3");
+
                     break;
                 case "船代":
                     tugFee.setState("4");
+                    tugFee.setApplicantComment("船代已签名");
+//                    String applicantComment = taskVo.getCommentData().getApplicantComment();
+                    String comment = taskVo.getCommentData().getApplicantComment();
+                    String sign = getSign(comment);
+
+                    String url = ossUtils.uploadBase64(UUID.randomUUID() + ".png", sign);
+
+//                    String img_src = "";
+                    tugFee.setImg(url);
+                    taskVo.setComment("船代已签名");
                     break;
                 default:
                     break;
@@ -141,6 +149,17 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         }
 
         return AjaxResult.success();
+    }
+
+    private String getSign(String comment) {
+        String sign = "";
+        if (StringUtils.isNotBlank(comment)) {
+            String[] split = comment.split(",");
+            if (split.length > 1) {
+                sign = split[1];
+            }
+        }
+        return sign;
     }
 
     /**
@@ -612,6 +631,8 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         String businessKey = processInstance.getBusinessKey();
         if (!StringUtils.isEmpty(businessKey)) {
             TugFee tugFee = tugFeeMapper.selectTugFeeById(Long.valueOf(businessKey));
+            tugFee.setAdminConfirmTime(new Date());
+            tugFee.setApplicantConfirmTime(new Date());
             tugFee.setState("5");
             tugFeeMapper.updateTugFee(tugFee);
         }
@@ -827,7 +848,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                     .processInstanceId(procInsId)
                     .orderByHistoricActivityInstanceStartTime()
                     .desc().list();
-            List<FlowTaskDto> hisFlowList = new ArrayList<>();
+            List<FlowTaskWithCommentDto> hisFlowList = new ArrayList<>();
             for (HistoricActivityInstance histIns : list) {
                 if (StringUtils.isNotBlank(histIns.getTaskId())) {
                     FlowTaskWithCommentDto flowTask = new FlowTaskWithCommentDto();
@@ -1247,7 +1268,6 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                 break;
             case "船代":
                 tugFee.setApplicantConfirmTime(new Date());
-                tugFee.setApplicantComment(taskVo.getCommentData().getApplicantComment());
                 break;
             default:
                 break;
@@ -1257,6 +1277,7 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
         tugFee.setUpdateBy(sysUser.getUserName());
         return tugFee;
     }
+
 
     // 获取当前任务节点的下一个任务节点
     private Task getNextTask(Task task) {
