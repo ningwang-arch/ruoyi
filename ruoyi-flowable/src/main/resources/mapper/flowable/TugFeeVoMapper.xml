@@ -174,5 +174,6 @@
         from tug_fee
         where tug_fee.applicant_id = #{userId}
           and tug_fee.state = '4'
+        order by tug_fee.create_time desc
     </select>
 </mapper>
