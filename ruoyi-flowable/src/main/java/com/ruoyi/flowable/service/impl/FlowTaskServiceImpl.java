@@ -123,15 +123,12 @@ public class FlowTaskServiceImpl extends FlowServiceFactory implements IFlowTask
                 case "船代":
                     tugFee.setState("4");
                     tugFee.setApplicantComment("船代已签名");
-//                    String applicantComment = taskVo.getCommentData().getApplicantComment();
                     String comment = taskVo.getCommentData().getApplicantComment();
                     String sign = getSign(comment);
-
                     String url = ossUtils.uploadBase64(UUID.randomUUID() + ".png", sign);
-
-//                    String img_src = "";
                     tugFee.setImg(url);
-                    taskVo.setComment("船代已签名");
+                    taskVo.getCommentData().setApplicantComment("船代已签名");
+                    taskVo.setComment(taskVo.getCommentData().toString());
                     break;
                 default:
                     break;
